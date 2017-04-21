@@ -1,0 +1,148 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+    >gulp-stylestats (v3.0.1)</a>
+</h1>
+<h4>Gulp plugin for StyleStats</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-stylestats">module gulp-stylestats</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-stylestats.gulp-stylestats">
+            function <span class="apidocSignatureSpan"></span>gulp-stylestats
+            <span class="apidocSignatureSpan">(options = {})</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.gulp-stylestats" id="apidoc.module.gulp-stylestats">module gulp-stylestats</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-stylestats.gulp-stylestats" id="apidoc.element.gulp-stylestats.gulp-stylestats">
+        function <span class="apidocSignatureSpan"></span>gulp-stylestats
+        <span class="apidocSignatureSpan">(options = {})</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">(options = {}) =&#x3e; through.obj(function (file, encode, callback) {
+  if (file.isNull()) {
+    this.push(file);
+    return callback();
+  }
+
+  if (file.isStream()) {
+    this.emit(&#x27;error&#x27;, new gutil.PluginError(&#x27;gulp-stylestats&#x27;, &#x27;Streaming is not supported&#x27;));
+    return callback();
+  }
+
+  let stylestats = new StyleStats(file.path, options);
+
+  stylestats.parse().then(result =&#x3e; {
+    let format = new Format(result);
+    let extension;
+    let method;
+
+    switch (options.type) {
+      case &#x27;json&#x27;:
+        extension = &#x27;.json&#x27;;
+        method = &#x27;toJSON&#x27;;
+        break;
+      case &#x27;csv&#x27;:
+        extension = &#x27;.csv&#x27;;
+        method = &#x27;toCSV&#x27;;
+        break;
+      default:
+        extension = &#x27;.txt&#x27;;
+        method = &#x27;toTable&#x27;;
+        break;
+    }
+
+    Promise.resolve(format[method]()).then(data =&#x3e; {
+      if (options.outfile) {
+        file.contents = new Buffer(data);
+        file.path = gutil.replaceExtension(file.path, extension);
+      } else {
+        console.log(data);
+      }
+
+      this.push(file);
+      callback();
+    });
+  }).catch(err =&#x3e; {
+    this.push(file);
+    callback(new gutil.PluginError(&#x27;gulp-stylestats&#x27;, err, {
+      fileName: file.path
+    }));
+  });
+}, callback =&#x3e; callback())</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
